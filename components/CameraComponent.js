@@ -136,10 +136,7 @@ const CameraComponent = () => {
           </View>
         )}
       </Camera>
-
       <ImageToText imageUri={setImage} />
-
-
     </View>
   );
 };
