@@ -1,9 +1,10 @@
 import React, { useState,useEffect } from 'react';
 import { View, Button, Text } from 'react-native';
 import Tesseract from 'tesseract.js';
-
+import TextToSpeech from './TextToSpeech'
 
 const ImageToText = ({imageUri}) => {
+  const[message,setMessage]=useState("")
 
   useEffect(()=>{
 handleImageToText(imageUri)
@@ -24,8 +25,15 @@ handleImageToText(imageUri)
     };
     
     fetch(`https://api.apilayer.com/image_to_text/url?url=${imageUri}`, requestOptions)
-      .then(response => response.text())
-      .then(result => console.log("sajbsdakjsbehksabhfwevbfvsejcvJHBD",result))
+      .then(response => response.json())
+      .then(result => {
+        console.log("this is the result",result)
+        console.log("This is the result all text",result.annotations.join(" "))
+        if(result && result.all_text){
+          setMessage(result.annotations.join(" "))
+        }
+      })
+r
       .catch(error => console.log('error', error));
   };
 
@@ -34,7 +42,7 @@ handleImageToText(imageUri)
 
         <Text>this componenet has been rendered</Text>
 
-      <Text>{extractedText}</Text>
+        <TextToSpeech message={message}/>
     </View>
   );
 };
