@@ -1,12 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import {
-  View,
-  TouchableOpacity,
-  Text,
-  Image,
-  StyleSheet,
-  Platform,
-} from "react-native";
+import { View, TouchableOpacity, Text, Image, StyleSheet } from "react-native";
 import { Camera } from "expo-camera";
 import * as FileSystem from "expo-file-system";
 
@@ -16,7 +9,6 @@ const CameraComponent = () => {
   const [feedbackText, setFeedbackText] = useState("");
   const [lastPhoto, setLastPhoto] = useState(null);
   const [showLastPhoto, setShowLastPhoto] = useState(false);
-  const [checkError, setError] = useState("Ta");
 
   const cameraRef = useRef(null);
 
@@ -34,57 +26,6 @@ const CameraComponent = () => {
         : Camera.Constants.Type.back
     );
   };
-  function dataURLtoFile(dataurl, filename) {
-    const arr = dataurl.split(",");
-    const mime = arr[0].match(/:(.*?);/)[1];
-    const bstr = atob(arr[1]);
-    let n = bstr.length;
-    const u8arr = new Uint8Array(n);
-
-    while (n--) {
-      u8arr[n] = bstr.charCodeAt(n);
-    }
-
-    // Use Blob instead of File if File is not supported
-    const blob = new Blob([u8arr], { type: mime });
-
-    // Create a File object if File is supported
-    // Note: The third parameter is optional and is used for setting the file's properties
-    const file = new File([blob], filename, { type: mime });
-
-    return file;
-  }
-
-  function uploadImage(file) {
-    file = dataURLtoFile("data:image/jpg;base64", file);
-    setError(file);
-    if (file) {
-      const formData = new FormData();
-      formData.append("image", file);
-
-      fetch(
-        "https://api.imgbb.com/1/upload?key=b8cbddd8db33ee8cd07005f8ea480683",
-        {
-          method: "POST",
-          body: formData,
-        }
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.data && data.data.url) {
-            alert("Image uploaded successfully!\nURL: " + data.data.url);
-          } else {
-            alert("Failed to upload ayush. Please try again.");
-          }
-        })
-        .catch((error) => {
-          console.error("Error uploading image:", error);
-          alert("Error uploading image. Please try again.");
-        });
-    } else {
-      alert("Please select an image to upload.");
-    }
-  }
 
   const takePicture = async () => {
     if (cameraRef.current) {
@@ -99,9 +40,8 @@ const CameraComponent = () => {
           from: photo.uri,
           to: fileName,
         });
-        console.log("Photo saved to:", fileName);
-        // Add it to db
 
+        // Upload the photo
         uploadImage(fileName);
 
         setLastPhoto(fileName);
@@ -113,6 +53,37 @@ const CameraComponent = () => {
         console.error("Failed to take picture", e);
         setFeedbackText("Failed to Take Photo");
       }
+    }
+  };
+
+  const uploadImage = async (filePath) => {
+    const fileUri = `file://${filePath}`;
+    const formData = new FormData();
+    formData.append("image", {
+      uri: fileUri,
+      type: "image/jpeg",
+      name: "photo.jpg",
+    });
+
+    try {
+      const response = await fetch(
+        "https://api.imgbb.com/1/upload?key=b8cbddd8db33ee8cd07005f8ea480683",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      const data = await response.json();
+
+      if (data.data && data.data.url) {
+        alert("Image uploaded successfully!\nURL: " + data.data.url);
+      } else {
+        alert("Failed to upload image. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      alert("Error uploading image. Please try again.");
     }
   };
 
@@ -139,7 +110,7 @@ const CameraComponent = () => {
             <Text style={styles.flipText}>Flip</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.captureButton} onPress={takePicture}>
-            <Text style={styles.captureText}>{checkError}</Text>
+            <Text style={styles.captureText}>Take Photo</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.viewLastPhotoButton}
