@@ -2,6 +2,8 @@ import React, { useRef, useState, useEffect } from "react";
 import { View, TouchableOpacity, Text, Image, StyleSheet } from "react-native";
 import { Camera } from "expo-camera";
 import * as FileSystem from "expo-file-system";
+import ImageToText from "./image_to_text";
+
 
 const CameraComponent = () => {
   const [hasPermission, setHasPermission] = useState(null);
@@ -9,7 +11,7 @@ const CameraComponent = () => {
   const [feedbackText, setFeedbackText] = useState("");
   const [lastPhoto, setLastPhoto] = useState(null);
   const [showLastPhoto, setShowLastPhoto] = useState(false);
-
+  const [setImage,setURI]=useState("")
   const cameraRef = useRef(null);
 
   useEffect(() => {
@@ -77,6 +79,10 @@ const CameraComponent = () => {
       const data = await response.json();
 
       if (data.data && data.data.url) {
+        // console.log(data.data.url,"adsfdfd")
+        // console.log(data.data,"saurav")
+
+        setURI(data.data.url)
         alert("Image uploaded successfully!\nURL: " + data.data.url);
       } else {
         alert("Failed to upload image. Please try again.");
@@ -130,9 +136,15 @@ const CameraComponent = () => {
           </View>
         )}
       </Camera>
+
+      <ImageToText imageUri={setImage} />
+
+
     </View>
   );
 };
+
+
 
 const styles = StyleSheet.create({
   container: {
