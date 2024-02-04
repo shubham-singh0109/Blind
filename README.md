@@ -1,11 +1,49 @@
-# Sample Snack app
+# Third i
 
-Open the `App.js` file to start writing some code. You can preview the changes directly on your phone or tablet by scanning the **QR code** or use the iOS or Android emulators. When you're done, click **Save** and share the link!
+## Description
+Presenting Third i, a cutting-edge cross-platform application that combines audio and visual elements in a seamless manner. With just one click, our software uses cutting-edge technology to convert photographs into vibrant text, allowing you to capture the moment. Behind the scenes, our backend works its magic to extract relevant content from photographs. Transform extracted text into an expressive and inclusive voice with our text-to-speech technology, elevating the user experience with an extra layer of accessibility. The third I is where voices can be heard and images can talk.
 
-When you're ready to see everything that Expo provides (or if you want to use your own editor) you can **Download** your project and use it with [expo cli](https://docs.expo.dev/get-started/installation/#expo-cli)).
+## Table of Contents
+- [Project Build]
+- [Necessary Libraries]
+- [Insttallation]
+- [Usage]
+- [Contribution]
 
-All projects created in Snack are publicly available, so you can easily share the link to this project via link, or embed it on a web page with the `<>` button.
+## Project Build
+The project Third i is build on recta-native application for converting Image to text and then text to speech using Expo's Speech API. The application is accessing the camera and with the help of that user can click a picture and the functionalities used in the application will revert the information in the form of speech.
 
-If you're having problems, you can tweet to us [@expo](https://twitter.com/expo) or ask in our [forums](https://forums.expo.dev/c/expo-dev-tools/61) or [Discord](https://chat.expo.dev/).
+Keynote: Before running the project, make sure you have the following installed-
+- [Node.js]
+- [Expo CLI]
 
-Snack is Open Source. You can find the code on the [GitHub repo](https://github.com/expo/snack).
+## Necessary Libraries
+import React, { useRef, useState, useEffect } from "react";
+import { View, TouchableOpacity, Text, Image, StyleSheet } from "react-native";
+import { Camera } from "expo-camera";
+import * as FileSystem from "expo-file-system";
+import ImageToText from "./image_to_text";
+import * as Speech from 'expo-speech';
+
+import React, { useState,useEffect } from 'react';
+import { View, Button, Text } from 'react-native';
+import TextToSpeech from './TextToSpeech'
+
+## Installation
+Clone the repository.
+Navigate to the project directory
+Install dependencies with the command 'yarn install'
+
+## Usage
+Run the app using 'yarn start'.
+Scan the Expo QR in your android or ios devices. 
+Click the picture by pressing anywhere on the mobile screen.
+
+## Contribution
+Contributions are welcome! Follow these steps:
+1. Fork the repository.
+2. Create a new branch.
+3. Make changes and commit with the proper message while pushing.
+4. Push the branch.
+5. Craete a pull request.
+
