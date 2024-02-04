@@ -4,9 +4,7 @@ import * as Speech from 'expo-speech';
 
 export default function TextToSpeech({message}) {
   const speak = (message) => {
-    console.log("THis is the message",message)
 if(message&&message.length){
-
     const thingToSay = message;
     Speech.speak(thingToSay,{language:'en'});
 }

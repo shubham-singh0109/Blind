@@ -3,7 +3,7 @@ import { View, TouchableOpacity, Text, Image, StyleSheet } from "react-native";
 import { Camera } from "expo-camera";
 import * as FileSystem from "expo-file-system";
 import ImageToText from "./image_to_text";
-
+import * as Speech from 'expo-speech';
 
 const CameraComponent = () => {
   const [hasPermission, setHasPermission] = useState(null);
@@ -12,12 +12,15 @@ const CameraComponent = () => {
   const [lastPhoto, setLastPhoto] = useState(null);
   const [showLastPhoto, setShowLastPhoto] = useState(false);
   const [setImage,setURI]=useState("")
+  const [count,setCount]=useState(0)
   const cameraRef = useRef(null);
+  
 
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestPermissionsAsync();
       setHasPermission(status === "granted");
+      Speech.speak("Press anywhere",{language:'en'});
     })();
   }, []);
 
@@ -30,11 +33,15 @@ const CameraComponent = () => {
   };
 
   const takePicture = async () => {
+    setCount((count)=>count+1)
     if (cameraRef.current) {
+      if(count%2!==0){
+      Speech.stop()
+      return
+      }
       try {
-        setFeedbackText("Taking Photo...");
+        
         const photo = await cameraRef.current.takePictureAsync();
-        console.log("Photo taken:", photo);
 
         // Save the photo to local storage
         const fileName = `${FileSystem.documentDirectory}photo.jpg`;
@@ -46,8 +53,8 @@ const CameraComponent = () => {
         // Upload the photo
         uploadImage(fileName);
 
-        setLastPhoto(fileName);
-        setFeedbackText("Photo Taken!");
+
+
         setTimeout(() => {
           setFeedbackText("");
         }, 3000);
@@ -79,11 +86,7 @@ const CameraComponent = () => {
       const data = await response.json();
 
       if (data.data && data.data.url) {
-        // console.log(data.data.url,"adsfdfd")
-        // console.log(data.data,"saurav")
-
         setURI(data.data.url)
-        alert("Image uploaded successfully!\nURL: " + data.data.url);
       } else {
         alert("Failed to upload image. Please try again.");
       }
@@ -110,33 +113,33 @@ const CameraComponent = () => {
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity style={styles.captureButton} onPress={takePicture}>
       <Camera style={styles.camera} type={cameraType} ref={cameraRef}>
-        <View style={styles.buttonContainer}>
+        {/* <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.flipButton} onPress={flipCamera}>
             <Text style={styles.flipText}>Flip</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.captureButton} onPress={takePicture}>
-            <Text style={styles.captureText}>Take Photo</Text>
-          </TouchableOpacity>
+
           <TouchableOpacity
             style={styles.viewLastPhotoButton}
             onPress={showLastPhotoHandler}
           >
             <Text style={styles.captureText}>View Last Photo</Text>
           </TouchableOpacity>
-        </View>
-        {feedbackText !== "" && (
+        </View> */}
+        {/* {feedbackText !== "" && (
           <View style={styles.feedbackContainer}>
             <Text style={styles.feedbackText}>{feedbackText}</Text>
           </View>
-        )}
-        {showLastPhoto && lastPhoto && (
+        )} */}
+        {/* {showLastPhoto && lastPhoto && (
           <View style={styles.lastPhotoContainer}>
             <Image source={{ uri: lastPhoto }} style={styles.lastPhoto} />
           </View>
-        )}
+        )} */}
+        <ImageToText imageUri={setImage} />
       </Camera>
-      <ImageToText imageUri={setImage} />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -146,11 +149,14 @@ const CameraComponent = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    // width:'100%',
     flexDirection: "row",
     justifyContent: "flex-end",
   },
   camera: {
     flex: 1,
+    // flexDirection: "row",
+    // justifyContent: "flex-end",
   },
   buttonContainer: {
     flexDirection: "row",
@@ -171,11 +177,13 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   captureButton: {
-    alignSelf: "flex-end",
-    alignItems: "center",
-    padding: 15,
-    backgroundColor: "rgba(255, 255, 255, 0.7)",
-    borderRadius: 5,
+    // alignSelf: "flex-end",
+    // alignItems: "center",
+    // padding: 15,
+    // backgroundColor: "rgba(255, 255, 255, 0.7)",
+    // borderRadius: 5,
+     width:'100%',
+     flexDirection: "row",
   },
   viewLastPhotoButton: {
     alignSelf: "flex-end",
