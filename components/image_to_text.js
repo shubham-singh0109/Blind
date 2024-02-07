@@ -16,7 +16,7 @@ handleImageToText(imageUri)
 
   const handleImageToText = async (imageUri) => {
     var myHeaders = new Headers();
-    myHeaders.append("apikey", "8CfWn4YZrimQ44Pvv4sScDH03hCBo28Y");
+    myHeaders.append("apikey", "QzJJQkGFPSDMb1mM16ADSLfNZJDaCgLS");
     
     var requestOptions = {
       method: 'GET',
