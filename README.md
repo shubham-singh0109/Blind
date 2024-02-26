@@ -1,5 +1,8 @@
 # Third i
 
+## Sample Video
+https://www.youtube.com/watch?v=TeqHGY_jMuE&ab_channel=PAC
+
 ## Description
 Presenting Third i, a cutting-edge cross-platform application that combines audio and visual elements in a seamless manner. With just one click, our software uses cutting-edge technology to convert photographs into vibrant text, allowing you to capture the moment. Behind the scenes, our backend works its magic to extract relevant content from photographs. Transform extracted text into an expressive and inclusive voice with our text-to-speech technology, elevating the user experience with an extra layer of accessibility. The third I is where voices can be heard and images can talk.
 
